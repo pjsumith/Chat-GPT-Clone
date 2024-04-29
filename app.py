@@ -14,23 +14,26 @@ def gpt():
     # Load the OpenAI API key from the environment variable
     load_dotenv()
     
-    # test that the API key exists
-    if os.getenv("API_KEY") is None or os.getenv("API_KEY") == "":
-        print("OPENAI_API_KEY is not set")
-        exit(1)
-    else:
-        print("OPENAI_API_KEY is set")
-
     # setup streamlit page
     st.set_page_config(
         page_title="ChatGPT with ApnaGPT",
         page_icon="🤖"
     )
 
+    with st.sidebar:
+        api_key = st.text_input("Enter your API Key: ", key="api_key")
+
+    # test that the API key exists
+    if api_key is None or api_key == "":
+        print("OPENAI_API_KEY is not set")
+        exit(1)
+    else:
+        print("OPENAI_API_KEY is set")
+
     # chat = ChatOpenAI(temperature=0)
     client = AzureChatOpenAI(
         azure_endpoint=os.getenv("ENDPOINT"),
-        api_key=os.getenv("API_KEY"),
+        api_key=api_key,
         api_version=os.getenv("API_VERSION"),
         model=os.getenv("MODEL_NAME"),
     )
